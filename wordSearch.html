@@ -1,0 +1,65 @@
+<% import random from bottle import request, get import numpy as np words = ["Lovelace" , "Gore", "Turing", "Church", "Gates", "Stroustrup", "Pascal", "Babbage", "Torvalds", "Knuth", "Codd", "Musk", "Abacus", "Apple", "Dell", "Google", "IBM", "Loom", "Python", "Perl", "Ruby", "Julia", "Transistor", "SQL", "HTML", "Basic", "Neumann", "Zuse", "CSS", "Javascript", "Machine", "Biuro", "Quantum", "Chip", "Analog", "Leibniz", "Jobs", "Cyber", "
+CPU", "Logic", "Kahn", "Rossum", "Wozniak", "Diode", "Oracle", "Plankalkul", "Link", "Fortran", "Intelligence", "Computing","Cerf","Wolfram"] 
+random.shuffle(words) 
+newList = [] 
+newString = '' 
+diff = request.forms.get("difficulty") 
+if diff == "1": 
+n = 13 
+wordListNum = 15 
+newList=list(words[0:wordListNum+1]) 
+for i in newList: newString+=(i) 
+end 
+elif diff == "2": 
+n = 21 
+wordListNum = 25 
+newList=list(words[0:wordListNum+1]) 
+for i in newList: newString+=(i) 
+end 
+elif diff == "3": 
+n = 31 
+wordListNum = 20 
+newList=list(words[0:wordListNum+1]) 
+for i in newList: newString+=(i) 
+end 
+end 
+#A subroutine to replace all "-" (empty characters) with a random letter 
+def FillArray(wordsearch): LETTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" 
+for row in range(0,n): 
+for col in range(0,n): 
+if wordsearch[row][col]=="-": 
+wordsearch[row][col]=random.choice(LETTERS) 
+end 
+end 
+end 
+end 
+wordsearch = [['-' for i in range(n)]for j in range(n)]
+#A subroutine to add a word to the wordsearch at a random position (horizontal) def addWord(word,wordsearch): 
+# add a randomizer for vertical and horizontal position 
+#wordDirection = random.choice['horizontal','vertical'] 
+if wordDirection == 'horizontal': 
+for i in newList: word = i.upper() 
+row=random.randint(0,(n-1)) 
+col=0 
+for space in range(0,len(word)): 
+wordsearch[row][col]=word[space] 
+col = col + 1 
+end 
+end 
+end 
+if wordDirection == 'vertical': 
+for i in newList: 
+word = i.upper() col=random.randint(0,(n-1)) 
+row=0 
+for space in range(0,len(word)): wordsearch[col][row]=word[space] 
+row = row + 1 
+end 
+end 
+end 
+#CHANGE THIS CODE TO # ----Randomly decide where the word will start # ----Decide if the word will be added horizontally, vertically or diagonally # ----Check that the word will fit in (within the 12 by 12 grid) # ----Check that the word will not overlap with existing letters/words in the wordsearch #Adding words to our wordsearch for i in range(0,wordListNum): addWord(newList[i],wordsearch) end #All unused spaces in the wordsearch will be replaced with a random letter #FillArray(wordsearch) %> Comp Sci Word Search
+%for i in range(len(wordsearch)): %for j in range(len(wordsearch)): {{wordsearch[i][j] }} %end
+%end
+%for i in newList:
+{{i.upper()}}
+
+%end
