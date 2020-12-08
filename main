@@ -1,0 +1,187 @@
+Bottle App
+_____________________________________________________________________
+
+
+@route('/')
+def menu():
+    return template("finalForm.html")
+
+@post('/wordSearch')
+def display():
+    return template("wordSearch.html")
+
+
+
+application = default_app()
+___________________________________________________________________________
+finalForm.html
+<!DOCTYPE html>
+
+<html lang = "en-us">
+<head>
+
+  <meta charset = "utf-8">
+  <title>Form</title>
+  <link rel="stylesheet" href="/static/simple.css" type="text/css" />
+</head>
+
+<body>
+
+<form action = "/wordSearch"
+      method = "post">
+  <fieldset>
+      <h1>Difficulty</h1>
+    <label>Select Your Difficulty</label>
+    <select name = "difficulty">
+    <option value = "1">1</option>
+    <option value = "2">2</option>
+    <option value = "3">3</option>
+    </select>
+    <button type = "submit">
+      submit
+    </button>
+  </fieldset>
+</form>
+</body>
+</html>
+______________________________________________________________________________
+wordSearch.html
+<%
+import random, copy
+from bottle import request, get
+import numpy as np
+
+words = ["Lovelace" , "Gore", "Turing", "Church", "Gates", "Stroustrup", "Pascal", "Babbage", "Torvalds",
+"Knuth", "Codd", "Musk", "Abacus", "Apple", "Dell", "Google", "IBM", "Loom", "Python", "Perl", "Ruby",
+"Julia", "Transistor", "SQL", "HTML", "Basic", "Neumann", "Zuse", "CSS", "Javascript", "Machine", "Biuro",
+"Quantum", "Chip", "Analog", "Leibniz", "Jobs", "Cyber", "CPU", "Logic", "Kahn", "Rossum", "Wozniak",
+"Diode", "Oracle", "Plankalkul", "Link", "Fortran", "Intelligence", "Computing","Cerf","Wolfram"]
+
+random.shuffle(words)
+
+newList = []
+newString = ''
+diff = request.forms.get("difficulty")
+
+if diff == "1":
+    n = 13
+    wordListNum = 15
+    newList=list(words[0:wordListNum+1])
+    for i in newList:
+        newString+=(i)
+    end
+elif diff == "2":
+    n = 21
+    wordListNum = 25
+    newList=list(words[0:wordListNum+1])
+    for i in newList:
+        newString+=(i)
+    end
+elif diff == "3":
+    n = 31
+    wordListNum = 20
+    newList=list(words[0:wordListNum+1])
+    for i in newList:
+        newString+=(i)
+    end
+end
+
+
+#A subroutine to replace all "-" (empty characters) with a random letter
+def FillArray(wordsearch):
+  LETTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  for row in range(0,n):
+    for col in range(0,n):
+      if wordsearch[row][col]=="-":
+        wordsearch[row][col]=random.choice(LETTERS)
+      end
+    end
+  end
+end
+
+wordsearch = [['-' for i in range(n)] for j in range(n)]
+
+#A subroutine to add a word to the wordsearch at a random position (horizontal)
+def addWord(word,wordsearch):
+# add a randomizer for vertical and horizontal position
+    wordDirection = random.choice(['horizontal','vertical'])
+    if wordDirection == 'horizontal':
+        for i in range(wordListNum):
+            word = newList[i].upper()
+            row=random.randint(0,(n-1))
+            B = n-(len(word))
+            LW=len(word)
+            col=random.randint(0,(B-1))
+            for space in range(0,LW):
+                wordsearch[row][col]=word[space]
+                col = col + 1
+            end
+            i+=1
+            break
+        end
+    end
+
+    if wordDirection == 'vertical':
+         for i in range(wordListNum):
+            word = newList[i].upper()
+            col=random.randint(0,n-1)
+            B= n-(len(word))
+            LW= len(word)
+            row=random.randint(0,(B-1))
+            for space in range(0,LW):
+                wordsearch[row][col]=word[space]
+                row = row + 1
+            end
+            i+=1
+        end
+    end
+end
+
+#Adding words to our wordsearch
+for i in range(0,wordListNum):
+    addWord(newList[i],wordsearch)
+end
+
+
+#All unused spaces in the wordsearch will be replaced with a random letter
+
+FillArray(wordsearch)
+CWordsearch=copy.deepcopy(wordsearch)
+CList = copy.deepcopy([newList])
+CDiff = copy.deepcopy(diff)
+%>
+
+
+<html lang = "en-us">
+<head>
+
+  <meta charset = "utf-8">
+  <title>Word$earch</title>
+  <link href="/static/simple.css" rel="stylesheet" />
+</head>
+<body>
+    <div id = "container">
+        <div id = "header">
+            <h1>Comp Sci Word Search</h1>
+        </div>
+        <div id = "main">
+            <div class="search">
+                %for i in range(len(wordsearch)):
+                    %for j in range(len(wordsearch)):
+                        <span>{{wordsearch[i][j] }}</span>
+                    %end
+                 <br>
+                %end
+            </div>
+            <div class= "list">
+                %for i in newList:
+                    <p>{{i.upper()}}</p>
+                %end
+            </div>
+        </div>
+        <div id="footer">
+            <h3>CSCI 230.Final Project.2019.BF</h3>
+        </div>
+    </div>
+
+</body>
